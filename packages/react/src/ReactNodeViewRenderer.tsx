@@ -200,25 +200,29 @@ export class ReactNodeView<
    * If it is, call `selectNode`, otherwise call `deselectNode`.
    */
   handleSelectionUpdate() {
-    const { from, to } = this.editor.state.selection
-    const pos = this.getPos()
+    try {
+      const { from, to } = this.editor.state.selection
+      const pos = this.getPos()
 
-    if (typeof pos !== 'number') {
-      return
-    }
-
-    if (from <= pos && to >= pos + this.node.nodeSize) {
-      if (this.renderer.props.selected) {
+      if (typeof pos !== 'number') {
         return
       }
 
-      this.selectNode()
-    } else {
-      if (!this.renderer.props.selected) {
-        return
-      }
+      if (from <= pos && to >= pos + this.node.nodeSize) {
+        if (this.renderer.props.selected) {
+          return
+        }
 
-      this.deselectNode()
+        this.selectNode()
+      } else {
+        if (!this.renderer.props.selected) {
+          return
+        }
+
+        this.deselectNode()
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
